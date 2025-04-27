@@ -3,11 +3,12 @@ const {
   getTaskById,
   updateTaskById,
   eraseTaskById,
+  addTask,
 } = require("../controllers/tasks.controllers");
 
 const tasksRouter = require("express").Router();
 
-tasksRouter.route("/").get(getAllTasks);
+tasksRouter.route("/").get(getAllTasks).post(addTask);
 
 tasksRouter
   .route("/:id")

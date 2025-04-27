@@ -33,6 +33,46 @@ describe("GET /api/tasks", () => {
   });
 });
 
+describe("POST /api/tasks", () => {
+  test("201: Adds a task and responds with the posted task", () => {
+    const newTask = {
+      title: "Review project",
+      description: "Check all endpoints and error handling works correctly.",
+      status: "pending",
+      due_date: "2025-04-28T11:00:00Z",
+    };
+    return request(app)
+      .post("/api/tasks")
+      .send(newTask)
+      .expect(201)
+      .then(({ body }) => {
+        expect(body.task).toMatchObject({
+          id: expect.any(Number),
+          title: "Review project",
+          description:
+            "Check all endpoints and error handling works correctly.",
+          status: "pending",
+          due_date: "2025-04-28T10:00:00.000Z",
+        });
+      });
+  });
+  test("400: Responds with error when a bad object is posted e.g. a malformed body / missing required fields", () => {
+    const newTask = {
+      title: null,
+      description: "Check all endpoints and error handling works correctly.",
+      status: "pending",
+      due_date: "2025-04-28T11:00:00Z",
+    };
+    return request(app)
+      .post("/api/tasks")
+      .send(newTask)
+      .expect(400)
+      .then(({ body }) => {
+        expect(body.msg).toEqual("Bad Request");
+      });
+  });
+});
+
 describe("GET /api/tasks/:id", () => {
   test("200: Responds with specified task", () => {
     return request(app)
@@ -127,10 +167,10 @@ describe("PATCH /api/tasks/:id", () => {
 });
 
 describe("DELETE /api/tasks/:id", () => {
-  test.only("204: Deletes a task specified by ID", () => {
+  test("204: Deletes a task specified by ID", () => {
     return request(app).delete("/api/tasks/1").expect(204);
   });
-  test.only("404: Responds with error when passed a non-existent ID", () => {
+  test("404: Responds with error when passed a non-existent ID", () => {
     return request(app)
       .delete("/api/tasks/99999999")
       .expect(404)
@@ -138,7 +178,7 @@ describe("DELETE /api/tasks/:id", () => {
         expect(body.msg).toEqual("No task found for ID: 99999999");
       });
   });
-  test.only("400: Responds with error when passed an ID that is not a number", () => {
+  test("400: Responds with error when passed an ID that is not a number", () => {
     return request(app)
       .delete("/api/tasks/NaN")
       .expect(400)
