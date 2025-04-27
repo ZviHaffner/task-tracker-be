@@ -27,6 +27,6 @@ module.exports = [
     title: "Test getting all tasks",
     description: null,
     status: "completed",
-    due_date: null,
+    due_date: "2025-04-28T12:00:00Z",
   },
 ];
