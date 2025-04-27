@@ -3,12 +3,22 @@ const {
   fetchTaskById,
   updateStatusByTask,
   deleteTaskById,
+  insertTask,
 } = require("../models/tasks.models");
 
 exports.getAllTasks = (req, res) => {
   fetchAllTasks().then(({ rows }) => {
     res.status(200).send({ tasks: rows });
   });
+};
+
+exports.addTask = (req, res, next) => {
+  const newTask = req.body;
+  insertTask(newTask)
+    .then((task) => {
+      res.status(201).send({ task });
+    })
+    .catch(next);
 };
 
 exports.getTaskById = (req, res, next) => {
