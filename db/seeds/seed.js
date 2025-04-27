@@ -1,7 +1,7 @@
 const format = require("pg-format");
 const db = require("../connection");
 
-const seed = ({ tasksData }) => {
+const seed = (tasksData) => {
   return db
     .query(`DROP TABLE IF EXISTS tasks;`)
     .then(() => {
