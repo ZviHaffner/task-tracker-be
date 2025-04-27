@@ -1,3 +1,4 @@
+const { log } = require("console");
 const db = require("../db/connection");
 
 exports.fetchAllTasks = () => {
@@ -16,5 +17,28 @@ exports.fetchTaskById = (id) => {
         });
       }
       return task;
+    });
+};
+
+exports.updateStatusByTask = (newStatus, id) => {
+  return db
+    .query(
+      `
+      UPDATE tasks
+      SET
+        status = $1
+      WHERE id = $2
+      RETURNING *;`,
+      [newStatus, id]
+    )
+    .then(({ rows }) => {
+      const updatedTask = rows;
+      if (!updatedTask.length) {
+        return Promise.reject({
+          status: 404,
+          msg: `No task found for id: ${id}`,
+        });
+      }
+      return updatedTask[0];
     });
 };

@@ -66,3 +66,62 @@ describe("GET /api/tasks/:id", () => {
       });
   });
 });
+
+describe("PATCH /api/tasks/:id", () => {
+  test("PATCH 201: Responds with updated status added for correct task", () => {
+    const newStatus = { new_status: "completed" };
+    return request(app)
+      .patch("/api/tasks/3")
+      .send(newStatus)
+      .expect(200)
+      .then(({ body }) => {
+        expect(body.updatedTask).toEqual({
+          id: 3,
+          title: "Test updating a task status",
+          description: "Check if the task status can be updated to completed.",
+          status: "completed",
+          due_date: "2025-04-28T10:00:00.000Z",
+        });
+      });
+  });
+  test("PATCH 400: Responds with error when a bad object is posted e.g. a malformed body / missing required fields", () => {
+    const newStatus = { new_status: null };
+    return request(app)
+      .patch("/api/tasks/3")
+      .send(newStatus)
+      .expect(400)
+      .then(({ body }) => {
+        expect(body.msg).toEqual("Bad Request");
+      });
+  });
+  test("PATCH 400: Responds with error when an empty object is posted", () => {
+    const newStatus = {};
+    return request(app)
+      .patch("/api/tasks/3")
+      .send(newStatus)
+      .expect(400)
+      .then(({ body }) => {
+        expect(body.msg).toEqual("Bad Request");
+      });
+  });
+  test("PATCH 404: Responds with error when passed a non-existent ID", () => {
+    const newStatus = { new_status: "completed" };
+    return request(app)
+      .patch("/api/tasks/99999999")
+      .send(newStatus)
+      .expect(404)
+      .then(({ body }) => {
+        expect(body.msg).toEqual("No task found for id: 99999999");
+      });
+  });
+  test("PATCH 400: Responds with error when passed an ID that is not a number", () => {
+    const newStatus = { new_status: "completed" };
+    return request(app)
+      .patch("/api/tasks/NaN")
+      .send(newStatus)
+      .expect(400)
+      .then(({ body }) => {
+        expect(body.msg).toEqual("Bad Request");
+      });
+  });
+});
