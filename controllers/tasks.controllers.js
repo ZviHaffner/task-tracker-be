@@ -1,4 +1,8 @@
-const { fetchAllTasks, fetchTaskById } = require("../models/tasks.models");
+const {
+  fetchAllTasks,
+  fetchTaskById,
+  updateStatusByTask,
+} = require("../models/tasks.models");
 
 exports.getAllTasks = (req, res) => {
   fetchAllTasks().then(({ rows }) => {
@@ -11,6 +15,16 @@ exports.getTaskById = (req, res, next) => {
   fetchTaskById(id)
     .then((task) => {
       res.status(200).send({ task });
+    })
+    .catch(next);
+};
+
+exports.updateTaskById = (req, res, next) => {
+  const { id } = req.params;
+  const { new_status } = req.body;
+  updateStatusByTask(new_status, id)
+    .then((updatedTask) => {
+      res.status(200).send({ updatedTask });
     })
     .catch(next);
 };
