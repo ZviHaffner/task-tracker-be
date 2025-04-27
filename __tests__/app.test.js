@@ -125,3 +125,25 @@ describe("PATCH /api/tasks/:id", () => {
       });
   });
 });
+
+describe("DELETE /api/tasks/:id", () => {
+  test.only("204: Deletes a task specified by ID", () => {
+    return request(app).delete("/api/tasks/1").expect(204);
+  });
+  test.only("404: Responds with error when passed a non-existent ID", () => {
+    return request(app)
+      .delete("/api/tasks/99999999")
+      .expect(404)
+      .then(({ body }) => {
+        expect(body.msg).toEqual("No task found for ID: 99999999");
+      });
+  });
+  test.only("400: Responds with error when passed an ID that is not a number", () => {
+    return request(app)
+      .delete("/api/tasks/NaN")
+      .expect(400)
+      .then(({ body }) => {
+        expect(body.msg).toEqual("Bad Request");
+      });
+  });
+});

@@ -2,6 +2,7 @@ const {
   fetchAllTasks,
   fetchTaskById,
   updateStatusByTask,
+  deleteTaskById,
 } = require("../models/tasks.models");
 
 exports.getAllTasks = (req, res) => {
@@ -25,6 +26,15 @@ exports.updateTaskById = (req, res, next) => {
   updateStatusByTask(new_status, id)
     .then((updatedTask) => {
       res.status(200).send({ updatedTask });
+    })
+    .catch(next);
+};
+
+exports.eraseTaskById = (req, res, next) => {
+  const { id } = req.params;
+  deleteTaskById(id)
+    .then(() => {
+      res.sendStatus(204);
     })
     .catch(next);
 };

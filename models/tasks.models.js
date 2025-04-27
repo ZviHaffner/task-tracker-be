@@ -42,3 +42,24 @@ exports.updateStatusByTask = (newStatus, id) => {
       return updatedTask[0];
     });
 };
+
+exports.deleteTaskById = (id) => {
+  return db
+    .query(
+      `
+      DELETE FROM tasks
+      WHERE id = $1
+      RETURNING *
+    `,
+      [id]
+    )
+    .then((result) => {
+      if (result.rowCount === 0) {
+        return Promise.reject({
+          status: 404,
+          msg: `No task found for ID: ${id}`,
+        });
+      }
+      return result;
+    });
+};
