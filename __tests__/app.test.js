@@ -12,6 +12,25 @@ afterAll(() => {
   connection.end();
 });
 
+describe("/api", () => {
+  test("GET 200: Responds with all endpoints", () => {
+    return request(app)
+      .get("/api")
+      .expect(200)
+      .then(({ body }) => {
+        const allEndpoints = body.endpoints;
+        for (key in allEndpoints) {
+          expect(allEndpoints[key]).toMatchObject({
+            description: expect.any(String),
+            queries: expect.any(Array),
+            reqBodyFormat: expect.any(Object),
+            exampleResponse: expect.any(Object),
+          });
+        }
+      });
+  });
+});
+
 describe("GET /api/tasks", () => {
   test("200: Responds with all tasks", () => {
     return request(app)
@@ -23,6 +42,7 @@ describe("GET /api/tasks", () => {
           expect(task).toMatchObject({
             id: expect.any(Number),
             title: expect.any(String),
+            status: expect.any(String),
             due_date: expect.any(String),
           });
           expect(
@@ -79,8 +99,8 @@ describe("GET /api/tasks/:id", () => {
       .get("/api/tasks/1")
       .expect(200)
       .then(({ body }) => {
-        const user = body.task;
-        expect(user).toMatchObject({
+        const task = body.task;
+        expect(task).toMatchObject({
           id: 1,
           title: "Test creating a task",
           description: "Ensure a task can be created successfully.",
