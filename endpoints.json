@@ -1,0 +1,77 @@
+{
+  "GET /api": {
+    "description": "serves up a json representation of all the available endpoints of the api",
+    "queries": [],
+    "reqBodyFormat": {},
+    "exampleResponse": {}
+  },
+  "GET /api/tasks": {
+    "description": "serves up an array of all tasks",
+    "queries": [],
+    "reqBodyFormat": {},
+    "exampleResponse": {
+      "topics": [
+        {
+          "id": "1",
+          "title": "Example Title",
+          "description": "Example description of task.",
+          "status": "completed",
+          "due_date": "2000-01-01T12:00:00.000Z"
+        }
+      ]
+    }
+  },
+  "POST /api/tasks": {
+    "description": "Posts a new task. Serves up a json representation of the new task.",
+    "queries": [],
+    "reqBodyFormat": {
+      "title": "Example Title",
+      "description": "Example description of task.",
+      "status": "pending",
+      "due_date": "2000-01-01T12:00:00Z"
+    },
+    "exampleResponse": {
+      "task": {
+        "id": 1,
+        "title": "Example Title",
+        "description": "Example description of task.",
+        "status": "pending",
+        "due_date": "2000-01-01T12:00:00.000Z"
+      }
+    }
+  },
+  "GET /api/tasks/:id": {
+    "description": "Serves up a json representation of a task specified by ID number.",
+    "queries": [],
+    "reqBodyFormat": {},
+    "exampleResponse": {
+      "task": {
+        "id": 1,
+        "title": "Example Title",
+        "description": "Example description of task.",
+        "status": "pending",
+        "due_date": "2000-01-01T12:00:00.000Z"
+      }
+    }
+  },
+  "PATCH /api/tasks/:id": {
+    "description": "Updates the status of a task specified by ID number. Serves up a json representation of the updated task.",
+    "queries": [],
+    "reqBodyFormat": { "new_status": "completed" },
+    "exampleResponse": {
+      "updatedTask": {
+        "id": 1,
+        "title": "Example Title",
+        "description": "Example description of task.",
+        "status": "completed",
+        "due_date": "2000-01-01T12:00:00.000Z"
+      }
+    }
+  },
+  "DELETE /api/tasks/:id": {
+    "description": "Deletes task specified by ID number. Does not serve up any content.",
+    "queries": [],
+    "reqBodyFormat": {},
+    "exampleResponse": {}
+  }
+}
