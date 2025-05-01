@@ -12,6 +12,17 @@ afterAll(() => {
   connection.end();
 });
 
+describe("/api/notARoute", () => {
+  test("GET 404", () => {
+    return request(app)
+      .get("/api/notARoute")
+      .expect(404)
+      .then(({ body }) => {
+        expect(body.msg).toBe("Route not found");
+      });
+  });
+});
+
 describe("/api", () => {
   test("GET 200: Responds with all endpoints", () => {
     return request(app)
